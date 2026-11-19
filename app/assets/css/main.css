@@ -512,7 +512,7 @@ a {
 }
 
 .competencies-intro {
-  width: min(720px, calc(100% -1 * var(--gutter)));
+  width: min(720px, calc(100% - 1 * var(--gutter)));
   margin: 0 auto 40px;
   text-align: center;
   padding: 0 14px;
