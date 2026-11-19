@@ -633,6 +633,15 @@ a {
   font-variation-settings: "GRAD" 0, "ROND" 0, "wdth" 100;
 }
 
+.page-intro.is-single {
+  grid-template-columns: minmax(0, 720px);
+  padding-bottom: 88px;
+}
+
+.page-intro.is-single p:last-child {
+  margin: 28px 0 0;
+}
+
 .lede,
 .prose p {
   max-width: 40rem;

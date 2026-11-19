@@ -1,2 +1,4 @@
 User-Agent: *
 Disallow:
+
+Sitemap: https://beate-kummer.de/sitemap.xml
