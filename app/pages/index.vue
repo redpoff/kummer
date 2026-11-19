@@ -48,10 +48,10 @@ useSeoMeta({
     <section class="split">
       <figure class="portrait">
         <img
-          src="/images/portrait.jpg"
+          src="/images/portrait_front.jpg"
           alt="Dr. Beate Kummer bei einem Vortrag"
-          width="1254"
-          height="1132"
+          width="640"
+          height="580"
         >
         <figcaption>Dr. Beate Kummer – Dipl.-Chemikerin, Fachtoxikologin und Umweltauditorin</figcaption>
       </figure>
