@@ -1,33 +1,25 @@
 <script setup lang="ts">
 import { offerings } from '~/data/site'
-import type { Offering } from '~/data/site'
 
 useSeoMeta({
   title: 'Unsere Leistungen',
   description: 'Leistungen von Kummer umwelt:kommunikation: Umweltkommunikation, Beauftragtenwesen, Gesetzesfolgenabschätzung, Berichte, Schulungen und Gutachten.'
 })
 
-const dialog = ref<HTMLDialogElement | null>(null)
-const title = ref<HTMLHeadingElement | null>(null)
-const active = ref<Offering | null>(null)
+const dialogs: HTMLDialogElement[] = []
 
-async function openOffering(item: Offering) {
-  active.value = item
-  await nextTick()
-  const element = dialog.value
-  if (!element) return
-  if (!element.open) element.showModal()
-  title.value?.focus()
+function setDialog(element: Element | null, index: number) {
+  if (element instanceof HTMLDialogElement) dialogs[index] = element
 }
 
-function onTitleKeydown(event: KeyboardEvent) {
-  if (event.key !== 'Tab') return
-  event.preventDefault()
-  dialog.value?.querySelector<HTMLButtonElement>('.service-dialog-close')?.focus()
+function openOffering(index: number) {
+  const element = dialogs[index]
+  if (!element || element.open) return
+  element.showModal()
 }
 
-function closeOffering() {
-  dialog.value?.close()
+function closeOffering(index: number) {
+  dialogs[index]?.close()
 }
 </script>
 
@@ -64,30 +56,36 @@ function closeOffering() {
 
     <section class="tile-grid" aria-label="Leistungen im Detail">
       <button
-        v-for="item in offerings"
+        v-for="(item, index) in offerings"
         :key="item.title"
         class="tile"
         type="button"
-        @click="openOffering(item)"
+        @click="openOffering(index)"
       >
         <img :src="item.icon" alt="" width="65" height="65">
         {{ item.title }}
       </button>
     </section>
 
-    <dialog ref="dialog" class="service-dialog" aria-labelledby="service-dialog-title" @close="active = null">
-      <div v-if="active" class="service-dialog-body">
-        <h2 id="service-dialog-title" ref="title" tabindex="-1" @keydown="onTitleKeydown">{{ active.title }}</h2>
-        <button class="service-dialog-close" type="button" aria-label="Schließen" @click="closeOffering">
+    <dialog
+      v-for="(item, index) in offerings"
+      :key="item.title"
+      :ref="(element) => setDialog(element as Element | null, index)"
+      class="service-dialog"
+      :aria-labelledby="`service-dialog-title-${index}`"
+    >
+      <div class="service-dialog-body">
+        <h2 :id="`service-dialog-title-${index}`">{{ item.title }}</h2>
+        <button class="service-dialog-close" type="button" aria-label="Schließen" @click="closeOffering(index)">
           ×
         </button>
-        <p v-if="active.body">{{ active.body }}</p>
-        <blockquote v-if="active.quote">
+        <p v-if="item.body">{{ item.body }}</p>
+        <blockquote v-if="item.quote">
           <p>
             <span class="quote-mark" aria-hidden="true">“</span>
-            <span class="quote-text">{{ active.quote }}</span>
+            <span class="quote-text">{{ item.quote }}</span>
           </p>
-          <footer v-if="active.quoteBy">({{ active.quoteBy }})</footer>
+          <footer v-if="item.quoteBy">({{ item.quoteBy }})</footer>
         </blockquote>
       </div>
     </dialog>
